@@ -62,6 +62,7 @@ public class UserWithMoney extends User {
 
 	public UserWithMoney(String email, String password,  Collection<? extends GrantedAuthority> mapRolesToAuthorities, int money) { //тут под вопросом
 		super(email, password, mapRolesToAuthorities);
+		this.money = money;
 	}
 
 
