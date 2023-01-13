@@ -1,8 +1,6 @@
 package net.javaguides.springboot.model;
 
 import com.sun.istack.NotNull;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,7 +20,7 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name="users", uniqueConstraints={@UniqueConstraint(columnNames={"email"})})
-public class UserWithMoney extends User {
+public class User {
 
 
 	@Id
@@ -45,24 +43,16 @@ public class UserWithMoney extends User {
 			inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private Collection<Role> roles;
 	
-	public UserWithMoney(String email, String password, Collection<? extends GrantedAuthority> authority, int money, Collection<Role> roles) {
-		super(email, password,  authority);
+	public User(String email, String password, int money, Collection<Role> roles) {
+		super();
+		this.email = email;
+		this.password = password;
 		this.money = money;
 		this.roles = roles;
 	}
 
-	public <T> UserWithMoney(String email, String password, int money, String encode, List<T> roleUser) { //не запустится, так как есть нулл
-		super(email, password, null);
-		this.money = money;
-	}
-
-	public UserWithMoney() {
-		super(null, null, null);
-	} //не запустится, так как есть нулл
-
-	public UserWithMoney(String email, String password,  Collection<? extends GrantedAuthority> mapRolesToAuthorities, int money) { //тут под вопросом
-		super(email, password, mapRolesToAuthorities);
-		this.money = money;
+	public User() {
+		super();
 	}
 
 
@@ -108,7 +98,7 @@ public class UserWithMoney extends User {
 
 	@Override
 	public String toString() {
-		return "UserWithMoney{" +
+		return "User{" +
 				"id=" + id +
 				", email='" + email + '\'' +
 				", password='" + password + '\'' +

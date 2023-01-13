@@ -13,7 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import net.javaguides.springboot.model.Role;
-import net.javaguides.springboot.model.UserWithMoney;
+import net.javaguides.springboot.model.User;
+import net.javaguides.springboot.model.UserDetailsWithMoney;
 import net.javaguides.springboot.repository.UserRepository;
 import net.javaguides.springboot.web.dto.UserRegistrationDto;
 
@@ -32,12 +33,11 @@ public class UserServiceImpl implements UserService {
 
 
 	@Override
-	public UserWithMoney save(UserRegistrationDto registrationDto) {
-		UserWithMoney user=new UserWithMoney(
+	public User save(UserRegistrationDto registrationDto) {
+		User user=new User(
 							registrationDto.getEmail(),
 							registrationDto.getPassword(),
 							registrationDto.getMoney(),
-							passwordEncoder.encode(registrationDto.getPassword()),
 							Arrays.asList(new Role("ROLE_USER")));
 		
 		return userRepository.save(user);
@@ -48,13 +48,13 @@ public class UserServiceImpl implements UserService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException 
 	{
 		
-		UserWithMoney user=userRepository.findByEmail(username);
+		User user=userRepository.findByEmail(username);
 		
 		if(user==null)
 		{
 			throw new UsernameNotFoundException("Invalid Username or password");			
 		}
-		return new UserWithMoney(user.getEmail(),  user.getPassword(),mapRolesToAuthorities(user.getRoles()), user.getMoney());
+		return new UserDetailsWithMoney(user.getEmail(),  user.getPassword(),mapRolesToAuthorities(user.getRoles()), user.getMoney());
 	}
 
 	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
